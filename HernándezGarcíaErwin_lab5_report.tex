@@ -1,0 +1,204 @@
+\documentclass[titlepage, 12pt]{article}
+
+\usepackage[utf8]{inputenc}			%Caracteres
+\usepackage{amssymb, amsmath, amsfonts, mathtools}		%Matemáticas
+\usepackage[bookmarks,hidelinks]{hyperref}	%Links en el ToC
+\usepackage[usenames,dvipsnames]{color}		%Colores
+\usepackage{listings}				%Código
+\usepackage{url}				%Links web
+\usepackage[hypcap]{caption}	%Imagenes
+\usepackage{float}				%Imágenes
+
+\usepackage{pdflscape}
+
+%Ajustar márgenes
+\topmargin=-0.45in
+\evensidemargin=0in
+\oddsidemargin=0in
+\textwidth=6.5in
+\textheight=9.0in
+\headsep=0.25in
+
+\numberwithin{equation}{section}%Número de ecuaciones (#Sección, #Ecuación)
+\numberwithin{figure}{section}%Número de imágenes (#Sección, #Imagen)
+\numberwithin{table}{section}%Número de imágenes (#Sección, #Tabla)
+
+\lstdefinestyle{customc}{
+	language=C,
+	frame=single, % Single frame around code
+	basicstyle=\small\ttfamily, % Use small true type font
+	keywordstyle=[1]\color{Blue}\bf, % C functions bold and blue
+	keywordstyle=[2]\color{Purple}, % C function arguments purple
+	keywordstyle=[3]\color{Blue}\underbar, % Custom functions underlined and blue
+	identifierstyle=, % Nothing special about identifiers                                         
+	commentstyle=\usefont{T1}{pcr}{m}{sl}\color[rgb]{0.0,0.4,0.0}\small, % Comments small dark green courier font
+	stringstyle=\color{Purple}, % Strings are purple
+	showstringspaces=false, % Don't put marks in string spaces
+	tabsize=2, % 2 spaces per tab
+	% Put standard C functions not included in the default language here
+	morekeywords={},
+	% Put C function parameters here
+	morekeywords=[2]{},
+	% Put user defined functions here
+	morekeywords=[3]{},
+	morecomment=[l][\color{Blue}]{...}, % Line continuation (...) like blue comment
+	numbers=left, % Line numbers on left
+	firstnumber=1, % Line numbers start with line 1
+	numberstyle=\tiny\color{Blue}, % Line numbers are blue and small
+	stepnumber=5, % Line numbers go in steps of 5
+	extendedchars=true,
+	inputencoding=utf8,
+	literate={á}{{\'a}}1 {é}{{\'e}}1 {í}{{\'i}}1 {ó}{{\'o}}1 {ú}{{\'u}}1 {ñ}{{\~n}}1,
+	} 
+
+\lstdefinestyle{customcpp}{
+	language=C++,
+	frame=single, % Single frame around code
+	basicstyle=\small\ttfamily, % Use small true type font
+	keywordstyle=[1]\color{Blue}\bf, % C++ functions bold and blue
+	keywordstyle=[2]\color{Purple}, % C++ function arguments purple
+	keywordstyle=[3]\color{Blue}\underbar, % Custom functions underlined and blue
+	identifierstyle=, % Nothing special about identifiers                                         
+	commentstyle=\usefont{T1}{pcr}{m}{sl}\color[rgb]{0.0,0.4,0.0}\small, % Comments small dark green courier font
+	stringstyle=\color{Purple}, % Strings are purple
+	showstringspaces=false, % Don't put marks in string spaces
+	tabsize=4, % 4 spaces per tab
+	% Put standard C++ functions not included in the default language here
+	morekeywords={std,string,cout,endl,ifstream,ofstream,ios, srand, time, nullptr},
+	% Put C++ function parameters here
+	morekeywords=[2]{iostream,fstream},
+	% Put user defined functions here
+	morekeywords=[3]{},
+	morecomment=[l][\color{Blue}]{...}, % Line continuation (...) like blue comment
+	numbers=left, % Line numbers on left
+	firstnumber=1, % Line numbers start with line 1
+	numberstyle=\tiny\color{Blue}, % Line numbers are blue and small
+	stepnumber=5, % Line numbers go in steps of 5
+	extendedchars=true
+	inputencoding=utf8,
+	literate={á}{{\'a}}1 {é}{{\'e}}1 {í}{{\'i}}1 {ó}{{\'o}}1 {ú}{{\'u}}1 {ñ}{{\~n}}1,
+}
+
+\lstdefinestyle{customlisp}{
+	language=lisp,
+	frame=single, % Single frame around code
+	basicstyle=\small\ttfamily, % Use small true type font
+	keywordstyle=[1]\color{Blue}\bf, % Lisp functions bold and blue
+	keywordstyle=[2]\color{Purple}, % Lisp function arguments purple
+	keywordstyle=[3]\color{Blue}\underbar, % Custom functions underlined and blue
+	identifierstyle=, % Nothing special about identifiers                                         
+	commentstyle=\usefont{T1}{pcr}{m}{sl}\color[rgb]{0.0,0.4,0.0}\small, % Comments small dark green courier font
+	stringstyle=\color{Purple}, % Strings are purple
+	showstringspaces=false, % Don't put marks in string spaces
+	tabsize=4, % 4 spaces per tab
+	% Put standard C++ functions not included in the default language here
+	morekeywords={},
+	% Put C++ function parameters here
+	morekeywords=[2]{},
+	% Put user defined functions here
+	morekeywords=[3]{},
+	morecomment=[l][\color{Blue}]{...}, % Line continuation (...) like blue comment
+	numbers=left, % Line numbers on left
+	firstnumber=1, % Line numbers start with line 1
+	numberstyle=\tiny\color{Blue}, % Line numbers are blue and small
+	stepnumber=5, % Line numbers go in steps of 5
+	extendedchars=true
+	inputencoding=utf8,
+	literate={á}{{\'a}}1 {é}{{\'e}}1 {í}{{\'i}}1 {ó}{{\'o}}1 {ú}{{\'u}}1 {ñ}{{\~n}}1,
+}
+
+\title{Binary Fields, AES and Operation Modes}
+\author{Eron Romero Argumedo\\Erwin Hernandez Garcia\\3CV1}
+\date{October 17, 2016}
+
+\newcommand{\imagen}[4][]{
+	\begin{figure}[H]
+		\centering
+		\includegraphics[#1]{#2}
+		\caption{#3}
+		#4
+	\end{figure}
+}
+
+\newcommand{\codescript}[4][]{
+	\begin{itemize}
+		\item[]\lstinputlisting[caption=#4,label=#3,style=custom#2, #1]{#3.#2}
+	\end{itemize}
+}
+
+\newcommand{\delimitCodeScript}[6][]{
+	\begin{itemize}
+		\item[]\lstinputlisting[lastline=#6,firstline=#5, caption=#4,label=#3#5#6,style=custom#2, #1]{#3.#2}
+	\end{itemize}	
+}
+
+\begin{document}
+	\maketitle
+	\pagenumbering{roman}
+	\tableofcontents
+	\listoffigures
+	\newpage
+	\pagenumbering{arabic}
+	\section{Theory}
+	
+	\subsection{Evariste Galois}
+	
+	Evariste Galois was a mathematical genius known nowadays for the development of the group theory. \medskip
+
+	Many of its constructions (today called Galois group, Galois fields and Galois theory) remain fundamental concepts in modern algebra.\cite{galois}
+	
+	
+	\subsection{Rijndael and AES}
+	
+	AES (Advances Encryption Standard) started as an initiative to replace the old Data Encryption Standard (DES) and triple-DES. \medskip
+	
+	Rijndael is an algorithm made by Joan Daemen and Vincent Rijmen. It was selected as a candidate for the AES. On 2 October, 2000, NIST (National Institute of Standards and Technology) officially announced that Rijndael, without modifications, would become the AES. Some factors that gave Rijndael a quick acceptance were that it is royalty-free and that it can be implemented easily on a wide range of platforms. \cite{rijndael}
+	
+	\section{Functions}
+	\subsection{Section 1}
+		\codescript{lisp}{Section1Code/aes-implementation}{Obtaining the keys for AES}
+		The AES implementation used was changed because the C implementation that was found did not work with variable key size.
+	
+	\subsection{Analysing the algorithm}
+		
+		\delimitCodeScript{c}{Section2CodeInverse/EuclidesPolinomios}{Inverse}{44}{84}
+		The inverse function receives two values, a polynomial $a \in GF(2^{t})$ and an irreducible polynomial $m$ of degree t. The output of this function is $a^{-1}$ in the binary field $GF(2^{t})$.
+		
+
+	
+	\subsection{Modes of operation}
+	\subsubsection{Key generation}
+		\delimitCodeScript{cpp}{Section2Code/Functions}{Key generation}{12}{23}
+		The key generation creates a 16bytes (128bits) random key, then saves them in a file with the specified name.
+	\subsubsection{ECB}
+		\delimitCodeScript{cpp}{Section2Code/Functions}{ECB mode}{65}{66}
+		\delimitCodeScript{cpp}{Section2Code/Functions}{AES}{127}{134}
+		The plaintext is ciphered independently of the other blocks
+	\subsubsection{CBC}
+		\delimitCodeScript{cpp}{Section2Code/Functions}{CBC mode}{82}{97}
+		If the solicited operation is encrypt, then an XOR operation is made with the plaintext and the previous ciphertext, the result is then encrypted.
+		On the other hand, if the decryption is solicited, first the ciphertext is decrypted and then the XOR is made with this result and the previous ciphertext
+	\subsubsection{CTR}
+		\delimitCodeScript{cpp}{Section2Code/Functions}{CTR mode}{99}{106}
+		The IV is encrypted, then an XOR is made with this result and the plaintext, finally the IV is increased by one to use it on the following round
+
+	\section{Screenshots}
+		\subsection{Inverse}
+		\subsubsection{Usage}
+		\imagen[width=\linewidth]{Section2CodeInverse/ModoUso.png}{Usage of the program}{\label{ModoUso}}
+		\subsubsection{Results}
+		\imagen[width=\linewidth]{Section2CodeInverse/Prueba1.png}{Test with a(x)=8 and m(x)=13}{\label{Prueba1}}
+		\imagen[width=\linewidth]{Section2CodeInverse/Prueba2.png}{Test with a(x)=2 and m(x)=b}{\label{Prueba2}}
+		\imagen[width=\linewidth]{Section2CodeInverse/Prueba3.png}{Test with a(x)=1b and m(x)=25}{\label{Prueba3}}
+		\imagen[width=\linewidth]{Section2CodeInverse/Prueba4.png}{Test with a(x)=f0 and m(x)=11b}{\label{Prueba4}}
+	
+		\subsection{Modes of operation}
+		\subsubsection{Usage}
+		\imagen[width=\linewidth]{Usage.png}{Usage of the program}{\label{Usage}}
+		\subsubsection{Results}
+		\imagen[width=\linewidth]{PlainText.png}{Original plaintext}{\label{Plaintext}}
+		\imagen[width=\linewidth]{Encrypt.png}{Ciphertext obtained after encrypt with AES}{\label{Ciphertext1}}
+		\imagen[width=\linewidth]{Decrypt.png}{Plaintext obtained after decrypt with AES}{\label{Ciphertext2}}			
+	\bibliographystyle{IEEEtran}
+	\bibliography{Bibliography}
+\end{document}

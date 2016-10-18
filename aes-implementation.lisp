@@ -1,0 +1,32 @@
+;;Erwin Hernández García
+;;Eron Romero Argumedo 
+;;17 de octubre de 2016
+;;Ejercicio 1, sección 1
+
+(load "/home/erwin/Documents/Práctica5/aes32.lisp")
+(defun crear-llave (tamaño-llave)
+  (let ((array (make-array (/ (nth (1- tamaño-llave) +aes-key-bits+) 8) :element-type 'unsigned-byte :initial-element 0)))
+    (do ((i 0 (1+ i)))
+	((eql i (array-dimension array 0)) array)
+      (setf (aref array i) (random #xFF)))))
+(defun bin-array->hex-str (bin)
+  (let ((hex (make-string (* 2 (length bin)))))
+    (dotimes (i (length bin))
+      (let ((h (format nil "~2,'0X" (aref bin i))))	
+	(setf (char hex (* 2 i)) (char h 0))
+	(setf (char hex (1+ (* 2 i))) (char h 1))))
+    hex))
+(format t "Bienvenido, Inserte su archivo~%")
+(defvar file (read))
+(let ((key1 (bin-array->hex-str (aes-key-fkey (aes-expand-key (crear-llave 1)))))
+      (key2 (bin-array->hex-str (aes-key-fkey (aes-expand-key (crear-llave 2)))))
+      (key3 (bin-array->hex-str (aes-key-fkey (aes-expand-key (crear-llave 3)))))
+      (filestream (open (symbol-name file) :direction :output)))
+  (setq function (lambda (limit filestream string)
+		  (do ((i 0 (1+ i)))
+		      ((eql i (1+ limit)) (terpri filestream))
+		    (write-line string filestream :start (* i 8) :end (+ (* i 8) 8)))))
+  (funcall function 10 filestream key1)
+  (funcall function 12 filestream key2)
+  (funcall function 13 filestream key3)
+  (close filestream))
